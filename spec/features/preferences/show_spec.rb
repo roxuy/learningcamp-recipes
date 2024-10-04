@@ -14,14 +14,20 @@ RSpec.describe 'Show preference' do
   end
 
   it 'shows the preference name' do
-    expect(page).to have_field('preference[name]', with: preference.name, disabled: true)
+    within('form') do
+      expect(page).to have_field('preference[name]', with: preference.name, disabled: true)
+    end
   end
 
   it 'shows the preference description' do
-    expect(page).to have_field('preference[description]', with: preference.description, disabled: true)
+    within('form') do
+      expect(page).to have_field('preference[description]', with: preference.description, disabled: true)
+    end
   end
 
   it 'shows the preference restriction' do
-    expect(page).to have_field('preference[restriction]', with: preference.restriction, disabled: true)
+    within('form') do
+      expect(page).to have_field('preference[restriction]', with: preference.restriction, disabled: true)
+    end
   end
 end
