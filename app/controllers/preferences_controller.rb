@@ -7,14 +7,14 @@ class PreferencesController < ApplicationController
   end
 
   def new
-    @preference = current_user.preferences.build
+    @preference = Preference.new
   end
 
   def create
     @preference = current_user.preferences.build(preference_params)
 
     if @preference.save
-      redirect_to preferences_path
+      redirect_to preferences_path, notice: t('views.preferences.create_success')
     else
       render :new, status: :unprocessable_entity
     end

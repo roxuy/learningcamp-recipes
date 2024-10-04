@@ -17,8 +17,6 @@
 #  index_preferences_on_user_id  (user_id)
 #
 class Preference < ApplicationRecord
-  MAX_PREFERENCES = 5
-
   belongs_to :user
 
   validates :name, presence: true
