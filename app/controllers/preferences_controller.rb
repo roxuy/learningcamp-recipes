@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 class PreferencesController < ApplicationController
+  before_action :set_preference, only: %i[show]
+
   def index
     @preferences = current_user.preferences
     @pagy, @records = pagy(@preferences)
   end
+
+  def show; end
 
   def new
     @preference = Preference.new
@@ -21,6 +25,10 @@ class PreferencesController < ApplicationController
   end
 
   private
+
+  def set_preference
+    @preference = Preference.find(params[:id])
+  end
 
   def preference_params
     params.require(:preference).permit(:name, :description, :restriction)
