@@ -35,7 +35,7 @@ class PreferencesController < ApplicationController
   end
 
   def destroy
-    if @preference.destroy
+    if @preference.destroy!
       redirect_to preferences_path, notice: t('views.preferences.destroy_success')
     else
       redirect_to preferences_path, alert: t('views.preferences.destroy_failure')
