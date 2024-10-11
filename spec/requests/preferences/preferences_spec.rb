@@ -104,7 +104,6 @@ RSpec.describe 'preferences' do
     let!(:preference) { create(:preference, user:) }
 
     context 'when logged in' do
-
       before { sign_in user }
 
       it 'is redirected' do
@@ -121,11 +120,12 @@ RSpec.describe 'preferences' do
       let!(:other_user) { create(:user) }
 
       before { sign_in other_user }
+
       it 'returns a not found response' do
         subject
         expect(response).to have_http_status(:not_found)
       end
-    end  
+    end
 
     context 'when no logged in' do
       it 'is redirected' do
@@ -134,8 +134,8 @@ RSpec.describe 'preferences' do
       end
 
       it 'does not delete the preference' do
-        expect { subject }.not_to change(Preference, :count)  
-      end  
+        expect { subject }.not_to change(Preference, :count)
+      end
     end
   end
 end
