@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PreferencesController < ApplicationController
-  before_action :set_preference, only: %i[show]
+  before_action :set_preference, only: %i[show edit update]
 
   def index
     @preferences = current_user.preferences
@@ -14,6 +14,8 @@ class PreferencesController < ApplicationController
     @preference = Preference.new
   end
 
+  def edit; end
+
   def create
     @preference = current_user.preferences.build(preference_params)
 
@@ -21,6 +23,14 @@ class PreferencesController < ApplicationController
       redirect_to preferences_path, notice: t('views.preferences.create_success')
     else
       render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @preference.update(preference_params)
+      redirect_to preferences_path, notice: t('views.preferences.update_success')
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
