@@ -25,11 +25,10 @@ RSpec.describe 'preferences' do
   describe 'GET #edit' do
     subject { get edit_preference_path(preference) }
 
-    let!(:preference) { create(:preference) }
+    let!(:user) { create(:user) }
+    let!(:preference) { create(:preference, user:) }
 
     context 'when logged in' do
-      let!(:user) { create(:user) }
-
       before { sign_in user }
 
       it 'returns a success response' do
@@ -54,7 +53,8 @@ RSpec.describe 'preferences' do
   describe 'PATCH #update' do
     subject { patch preference_path(preference), params: { preference: attributes } }
 
-    let!(:preference) { create(:preference) }
+    let!(:user) { create(:user) }
+    let!(:preference) { create(:preference, user:) }
     let(:attributes) do
       {
         name: 'New Name',
@@ -64,8 +64,6 @@ RSpec.describe 'preferences' do
     end
 
     context 'when logged in' do
-      let!(:user) { create(:user) }
-
       before { sign_in user }
 
       context 'with valid data' do
