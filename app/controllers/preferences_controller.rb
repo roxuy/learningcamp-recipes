@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PreferencesController < ApplicationController
-  before_action :set_preference, only: %i[show edit update]
+  before_action :set_preference, only: %i[show edit update destroy]
 
   def index
     @preferences = current_user.preferences
@@ -31,6 +31,14 @@ class PreferencesController < ApplicationController
       redirect_to preferences_path, notice: t('views.preferences.update_success')
     else
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @preference.destroy
+      redirect_to preferences_path, notice: t('views.preferences.destroy_success')
+    else
+      redirect_to preferences_path, alert: t('views.preferences.destroy_failure')
     end
   end
 

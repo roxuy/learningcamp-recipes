@@ -96,4 +96,46 @@ RSpec.describe 'preferences' do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    subject { delete preference_path(preference) }
+
+    let!(:user) { create(:user) }
+    let!(:preference) { create(:preference, user:) }
+
+    context 'when logged in' do
+      before { sign_in user }
+
+      it 'is redirected' do
+        subject
+        expect(response).to have_http_status(:redirect)
+      end
+
+      it 'deletes the preference' do
+        expect { subject }.to change(Preference, :count).by(-1)
+      end
+    end
+
+    context 'when preference not belongs to the user' do
+      let!(:other_user) { create(:user) }
+
+      before { sign_in other_user }
+
+      it 'returns a not found response' do
+        subject
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'when no logged in' do
+      it 'is redirected' do
+        subject
+        expect(response).to have_http_status(:redirect)
+      end
+
+      it 'does not delete the preference' do
+        expect { subject }.not_to change(Preference, :count)
+      end
+    end
+  end
 end
