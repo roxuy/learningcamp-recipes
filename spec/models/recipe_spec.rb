@@ -22,26 +22,9 @@ RSpec.describe Recipe do
   describe 'validations' do
     subject { build(:recipe) }
 
-    context 'when attributes are present' do
-      it { is_expected.to be_valid }
-    end
-
-    context 'when name is empty' do
-      subject { build(:recipe, name: '') }
-
-      it { is_expected.not_to be_valid }
-    end
-
-    context 'when description is empty' do
-      subject { build(:recipe, description: '') }
-
-      it { is_expected.not_to be_valid }
-    end
-
-    context 'when ingredients is empty' do
-      subject { build(:recipe, ingredients: '') }
-
-      it { is_expected.not_to be_valid }
-    end
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:description) }
+    it { is_expected.to validate_presence_of(:ingredients) }
+    it { is_expected.to belong_to(:user) }
   end
 end
