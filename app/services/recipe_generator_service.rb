@@ -42,7 +42,13 @@ class RecipeGeneratorService
 
   def prompt
     <<~CONTENT
-      Prompt goes here
+      Create a recipe using only the ingredients provided. Do not include any other ingredients.
+      Return the response in a JSON, with this structure:
+      {
+        "name": "Dish Name",
+        "content": "Recipe instructions"
+      }
+      Be sure the JSON is well formatted without extra spaces or new lines, and do not include any delimiters like ```json.#{' '}
     CONTENT
   end
 
@@ -59,7 +65,7 @@ class RecipeGeneratorService
   def create_recipe(response)
     parsed_response = response.is_a?(String) ? JSON.parse(response) : response
     content = JSON.parse(parsed_response.dig('choices', 0, 'message', 'content'))
-    # create recipe here
+    recipe = @user.recipes.build(name: content['name'], description: content['content'], ingredients: @message)
   rescue JSON::ParserError => exception
     raise RecipeGeneratorServiceError, exception.message
   end
