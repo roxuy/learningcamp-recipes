@@ -42,13 +42,11 @@ class RecipeGeneratorService
 
   def prompt
     <<~CONTENT
-      Create a recipe using only the ingredients provided. Do not include any other ingredients.
-      Return the response in a JSON, with this structure:
-      {
-        "name": "Dish Name",
-        "content": "Recipe instructions"
-      }
-      Be sure the JSON is well formatted without extra spaces or new lines, and do not include any delimiters like ```json.#{' '}
+      Write a recipe following these rules:
+      1) The recipe MUST include only the ingredients provided.
+      2) Your response MUST be in JSON format, as this example:
+      { "name": "Dish Name",
+        "content": "Recipe instructions" }
     CONTENT
   end
 

@@ -23,7 +23,7 @@ RSpec.describe 'Create recipe' do
 
   describe 'create recipe' do
     context 'with valid data' do
-      let(:ingredients) { 'Harina, Azucar, Pan, Aceite' }
+      let(:ingredients) { 3.times.map { Faker::Food.ingredient }.join(', ') }
 
       before do
         stub_request(:post, 'https://api.openai.com/v1/chat/completions')
@@ -32,7 +32,10 @@ RSpec.describe 'Create recipe' do
               model: 'gpt-3.5-turbo-1106',
               messages: [
                 { role: 'system',
-                  content: "Create a recipe using only the ingredients provided. Do not include any other ingredients.\nReturn the response in a JSON, with this structure:\n{\n  \"name\": \"Dish Name\",\n  \"content\": \"Recipe instructions\"\n}\nBe sure the JSON is well formatted without extra spaces or new lines, and do not include any delimiters like ```json. \n" },
+                content: "Write a recipe following these rules:\n" \
+                "1) The recipe MUST include only the ingredients provided.\n" \
+                "2) Your response MUST be in JSON format, as this example:\n" \
+                "{ \"name\": \"Dish Name\",\n  \"content\": \"Recipe instructions\" }\n" },
                 { role: 'user', content: "Ingredients: #{ingredients}" }
               ],
               temperature: 0.0
