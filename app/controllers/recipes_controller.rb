@@ -10,9 +10,10 @@ class RecipesController < ApplicationController
   end
 
   def create
-    @recipe = current_user.recipes.build(recipe_params)
+    service = RecipeGeneratorService.new(recipe_params[:ingredients], current_user.id)
+    recipe = service.call
 
-    if @recipe.save
+    if recipe.save
       redirect_to recipes_path, notice: t('views.recipes.create_success')
     else
       render :new, status: :unprocessable_entity
