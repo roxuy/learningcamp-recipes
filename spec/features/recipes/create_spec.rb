@@ -23,6 +23,16 @@ RSpec.describe 'Create recipe' do
   describe 'create recipe' do
     context 'with valid data' do
       let(:ingredients) { Array.new(3) { Faker::Food.ingredient }.join(', ') }
+      let(:preference) do
+        create(:preference, user:, restrictions: false, description: 'Recipe should be made on the oven')
+      end
+      let(:restriction) { create(:preference, user:, restrictions: true, description: Faker::Food.ingredients) }
+      let(:preferences) do
+        user.preferences.where.not(restriction: false).map(&:description).join(', ')
+      end
+      let(:restrictions) do
+        user.preferences.where.not(restriction: true).map(&:description).join(', ')
+      end
 
       before do
         stub_request(:post, 'https://api.openai.com/v1/chat/completions')
@@ -33,9 +43,12 @@ RSpec.describe 'Create recipe' do
                 { role: 'system',
                   content: "Write a recipe following these rules:\n" \
                            "1) The recipe MUST include only the ingredients provided.\n" \
-                           "2) Your response MUST be in JSON format, as this example:\n" \
+                           "2) The recipe SHOULD follow the preferences provided.\n" \
+                           "3) DO NOT include any ingredients listed as restrictions.\n" \
+                           "4) Your response MUST be in JSON format, as this example:\n" \
                            "{ \"name\": \"Dish Name\",\n  \"content\": \"Recipe instructions\" }\n" },
-                { role: 'user', content: "Ingredients: #{ingredients}" }
+                { role: 'user',
+                  content: "Ingredients: #{ingredients}, Preferences: #{preferences}, Restrictions: #{restrictions}" }
               ],
               temperature: 0.0
             }.to_json,
@@ -53,7 +66,9 @@ RSpec.describe 'Create recipe' do
                       name: 'Tomato Bread',
                       content: "Write a recipe following these rules:\n" \
                                "1) The recipe MUST include only the ingredients provided.\n" \
-                               "2) Your response MUST be in JSON format, as this example:\n" \
+                               "2) The recipe SHOULD follow the preferenes provided.\n" \
+                               "3) DO NOT include any ingredients listed as restrictions.\n" \
+                               "4) Your response MUST be in JSON format, as this example:\n" \
                                "{ \"name\": \"Dish Name\",\n  \"content\": \"Recipe instructions\" }\n"
                     }.to_json
                   }

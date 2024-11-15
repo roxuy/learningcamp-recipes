@@ -44,7 +44,9 @@ class RecipeGeneratorService
     <<~CONTENT
       Write a recipe following these rules:
       1) The recipe MUST include only the ingredients provided.
-      2) Your response MUST be in JSON format, as this example:
+      2) The recipe SHOULD follow the preferences provided.
+      3) DO NOT include any ingredients listed as restrictions.
+      4) Your response MUST be in JSON format, as this example:
       { "name": "Dish Name",
         "content": "Recipe instructions" }
     CONTENT
@@ -52,8 +54,16 @@ class RecipeGeneratorService
 
   def new_message
     [
-      { role: 'user', content: "Ingredients: #{message}" }
+      { role: 'user', content: "Ingredients: #{message}, Preferences: #{preferences}, Restrictions: #{restrictions}" }
     ]
+  end
+
+  def restrictions
+    @user.preferences.where(restriction: true).map(&:description).join(', ') || ''
+  end
+
+  def preferences
+    @user.preferences.where.not(restriction: false).map(&:description).join(', ') || ''
   end
 
   def openai_client
