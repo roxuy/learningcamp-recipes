@@ -44,8 +44,8 @@ class RecipeGeneratorService
     <<~CONTENT
       Write a recipe following these rules:
       1) The recipe MUST include only the ingredients provided.
-      2) The recipe SHOULD follow the preferences provided.
-      3) DO NOT include any ingredients listed as restrictions.
+      2) Every preference MUST be incorporated into the recipe.
+      3) The recipe SHOULD exclude any ingredients listed as restrictions.
       4) Your response MUST be in JSON format, as this example:
       { "name": "Dish Name",
         "content": "Recipe instructions" }
@@ -63,7 +63,7 @@ class RecipeGeneratorService
   end
 
   def preferences
-    @user.preferences.where.not(restriction: false).map(&:description).join(', ') || ''
+    @user.preferences.where(restriction: false).map(&:description).join(', ') || ''
   end
 
   def openai_client
