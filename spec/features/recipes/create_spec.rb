@@ -44,7 +44,7 @@ RSpec.describe 'Create recipe' do
                   content: "Write a recipe following these rules:\n" \
                            "1) The recipe MUST include only the ingredients provided.\n" \
                            "2) Every preference MUST be incorporated into the recipe.\n" \
-                           "3) The recipe SHOULD exclude any ingredients listed as restrictions.\n" \
+                           "3) The recipe MUST exclude any ingredients listed as restrictions.\n" \
                            "4) Your response MUST be in JSON format, as this example:\n" \
                            "{ \"name\": \"Dish Name\",\n  \"content\": \"Recipe instructions\" }\n" },
                 { role: 'user',
@@ -67,7 +67,7 @@ RSpec.describe 'Create recipe' do
                       content: "Write a recipe following these rules:\n" \
                                "1) The recipe MUST include only the ingredients provided.\n" \
                                "2) Every preference MUST be incorporated into the recipe.\n" \
-                               "3) The recipe SHOULD exclude any ingredients listed as restrictions.\n" \
+                               "3) The recipe MUST exclude any ingredients listed as restrictions.\n" \
                                "4) Your response MUST be in JSON format, as this example:\n" \
                                "{ \"name\": \"Dish Name\",\n  \"content\": \"Recipe instructions\" }\n"
                     }.to_json
