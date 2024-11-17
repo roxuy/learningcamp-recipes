@@ -54,7 +54,7 @@ class RecipeGeneratorService
 
   def new_message
     [
-      { role: 'user', content: "Ingredients: #{message}, Preferences: #{preferences}, Restrictions: #{restrictions}, Preferences: #{preferences}, Restrictions: #{restrictions}" }
+      { role: 'user', content: "Ingredients: #{message}, Preferences: #{preferences}, Restrictions: #{restrictions}" }
     ]
   end
 
