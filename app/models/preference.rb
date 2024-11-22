@@ -24,10 +24,10 @@ class Preference < ApplicationRecord
   validates :name, presence: true
   validates :description, presence: true
   validates :restriction, inclusion: { in: [true, false] }
-  validate :validate_preferences_number, on: :create
+  validate :preferences_number, on: :create
 
-  def validate_preferences_number
-    return unless user.preferences.size >= MAX_PREFERENCES
+  def preferences_number
+    return unless user && user.preferences.size >= MAX_PREFERENCES
 
     errors.add(:base, I18n.t('views.preferences.limit_reached_message', max: MAX_PREFERENCES))
   end

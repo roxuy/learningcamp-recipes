@@ -31,9 +31,10 @@ RSpec.describe 'Create preference' do
   context 'when the user has reached the maximum number of preferences' do
     let!(:user_with_max_preferences) { create(:user) }
     let!(:preference) { build(:preference) }
+    let!(:max_preferences) { Preference::MAX_PREFERENCES }
 
     before do
-      create_list(:preference, Preference::MAX_PREFERENCES, user: user_with_max_preferences)
+      create_list(:preference, max_preferences, user: user_with_max_preferences)
       sign_in user_with_max_preferences
       visit new_preference_path
       fill_in 'preference[name]', with: preference[:name]
@@ -42,11 +43,11 @@ RSpec.describe 'Create preference' do
     end
 
     it 'render the error message' do
-      expect(page).to have_content(I18n.t('views.preferences.limit_reached_message', max: Preference::MAX_PREFERENCES))
+      expect(page).to have_content(I18n.t('views.preferences.limit_reached_message', max: max_preferences))
     end
 
     it 'do not creates the preference' do
-      expect(Preference.where(user: user_with_max_preferences).count).to eq(Preference::MAX_PREFERENCES)
+      expect(Preference.where(user: user_with_max_preferences).count).to eq(max_preferences)
     end
   end
 end
